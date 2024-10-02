@@ -9,13 +9,13 @@ public class TestStudent {
         final Student student = new Student(null, null);
         final double preStudyTime = student.getTotalStudyTime();
         final double expectedTotalStudyTime = preStudyTime + numberOfHoursToLearn;
-        Assert.assertNotEquals(expectedTotalStudyTime, preStudyTime);
+        Assert.assertNotEquals(expectedTotalStudyTime, preStudyTime, 0.0);
 
         // when
         student.learn(numberOfHoursToLearn);
 
         // then
-        Assert.assertEquals(expectedTotalStudyTime, student.getTotalStudyTime());
+        Assert.assertEquals(expectedTotalStudyTime, student.getTotalStudyTime(), 0.0);
     }
     @Test
     public void testLearnWith10() {

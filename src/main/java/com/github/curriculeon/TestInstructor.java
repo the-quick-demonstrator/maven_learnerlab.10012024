@@ -11,40 +11,39 @@ public class TestInstructor {
     private void testLecture(final double numberOfHours, final double... preStudyTimes) {
         final Instructor instructor = new Instructor(null, null);
         final Learner[] learners = new Student[preStudyTimes.length];
-        final Map<Learner, Double> preStudyTimeMap = new HashMap<>();
         final double expectedNumberOfHoursPerStudent = numberOfHours/learners.length;
+        final double[] expectedPostStudyTimes = new double[preStudyTimes.length];
         for (int i = 0; i < learners.length; i++) {
-            learners[i] = new Student(null, null);
-            final Learner learner = learners[i];
+            final Student learner = new Student(null, null);
             Assert.assertEquals(0, learner.getTotalStudyTime(), 0.0001);
-            learner.learn(expectedNumberOfHoursPerStudent);
-            preStudyTimeMap.put(learner, learner.getTotalStudyTime());
+            learner.learn(preStudyTimes[i]);
             Assert.assertEquals(preStudyTimes[i], learner.getTotalStudyTime(), 0.0001);
+            final double expectedPostStudyTime = learner.getTotalStudyTime() + expectedNumberOfHoursPerStudent;
+            learners[i] = learner;
+            expectedPostStudyTimes[i] = expectedPostStudyTime;
         }
 
         // when
         instructor.lecture(learners, numberOfHours);
 
         // then
-        final Map<Learner, Double> postStudyTimeMap = new HashMap<>();
         for (int i = 0; i < learners.length; i++) {
             final Learner learner = learners[i];
-            learner.learn(expectedNumberOfHoursPerStudent);
-            final double postStudyTime = learner.getTotalStudyTime();
-            postStudyTimeMap.put(learner, postStudyTime);
-            final Double preStudyTime = preStudyTimeMap.get(learner);
-            final double expectedStudyTime = preStudyTime + expectedNumberOfHoursPerStudent;
-            final double actualStudyTime = preStudyTime + postStudyTime;
-            Assert.assertEquals(expectedStudyTime, actualStudyTime);
+            final double expectedStudyTime = expectedPostStudyTimes[i];
+            final double actualStudyTime = learner.getTotalStudyTime();
+            Assert.assertEquals(expectedStudyTime, actualStudyTime, 0.0);
         }
     }
 
     @Test
-    public void testLecture() {
+    public void testLecture1() {
         //given
-        int numberOfHours = 15;
-        double[] preStudyTimes = {17.0, 12.0, 11.0, 89.0, 100.0};
-        testLecture(15, preStudyTimes);
+        testLecture(15, 0.0, 17.0, 12.0, 11.0, 89.0, 100.0);
+    }
+    @Test
+    public void testLecture2() {
+        //given
+        testLecture(20, 0.0, 25.0, 16.0, 39.0, 17.5, 167.0);
     }
 
     private Learner testTeach(final Double preStudyTime, final double numberOfHours) {

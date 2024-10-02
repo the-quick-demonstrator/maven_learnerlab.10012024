@@ -1,6 +1,11 @@
 package com.github.curriculeon;
 
 public interface Learner {
-    void learn(double numberOfHours);
+    default void learn(double numberOfHours) {
+        setTotalStudyTime(getTotalStudyTime() + numberOfHours);
+    }
+
+    void setTotalStudyTime(double totalStudyTime);
+
     double getTotalStudyTime();
 }
